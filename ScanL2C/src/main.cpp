@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <Wire.h>
 
-int SDA_PIN = D0;
-int SCL_PIN = D2; 
+int SDA_PIN = D1;
+int SCL_PIN = D3; 
 
 
 void setup() {
@@ -15,24 +15,27 @@ void loop() {
   int nDevices;
   Serial.print("Scanning...\n");
   nDevices = 0;
+
   for(address = 1; address < 127; address++ ) {
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
+
     if (error == 0){
+      Serial.print("I2C device found at address 0x");
       if(address < 16){
         Serial.print("0");
-        Serial.println(address, HEX);
-        Serial.println("!");
-
-        nDevices++;
       }
+      Serial.println(address, HEX);
+      Serial.println("!");
+
+      nDevices++;
     }else if(error == 4){
       Serial.print("Ada error yang tidak diketahui pada alamat 0X");
 
       if(address<16){
         Serial.print("0");
-        Serial.print(address, HEX);
       }
+      Serial.print(address, HEX);
     }
   }
   if(nDevices==0){
